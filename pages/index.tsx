@@ -1,8 +1,10 @@
-import { Button } from '@nextui-org/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
+import { Publication } from '../components';
 import styles from '../styles/Home.module.css';
+import { data } from '../services/data';
+import { useEffect } from 'react';
+import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
@@ -14,6 +16,7 @@ const Home: NextPage = () => {
       </Head>
 
       <h1>Projeto Estrelar</h1>
+      <Publication />
     </div>
   );
 };

@@ -1,0 +1,23 @@
+.wrapper {
+  width: 20rem;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__header__imgName {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card__header__star {
+  margin-right: 1rem;
+}
+
+.card__body__link {
+  color: #0070f2;
+}
