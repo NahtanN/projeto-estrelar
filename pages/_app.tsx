@@ -9,6 +9,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     // @ts-ignore
     const { ethereum } = window;
 
+    if (!ethereum) return;
+
     ethereum.on('accountsChanged', async () => {
       const accounts = await ethereum.request({
         method: 'eth_accounts',
