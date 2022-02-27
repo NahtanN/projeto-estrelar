@@ -2,9 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Publication } from '../components';
 import styles from '../styles/Home.module.css';
-import { data } from '../services/data';
-import { useEffect } from 'react';
-import Link from 'next/link';
+import { cardData } from '../services/cardData';
 
 const Home: NextPage = () => {
   return (
@@ -16,7 +14,11 @@ const Home: NextPage = () => {
       </Head>
 
       <h1>Projeto Estrelar</h1>
-      <Publication />
+      <main className={styles.cards}>
+        {cardData.map(card => {
+          return <Publication key={card.title} cardData={card} />;
+        })}
+      </main>
     </div>
   );
 };

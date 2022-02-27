@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
-
+import { cardData, CardDataType } from '../../services/cardData';
+import Links from './Links';
 import styles from './Publication.module.css';
 
-const Publication = () => {
+const Publication = ({ cardData }: { cardData: CardDataType }) => {
   const [starred, setStarred] = useState(true);
+  const bodyText = cardData.description.split('<links>');
 
   return (
     <section className={styles.wrapper}>
@@ -19,7 +21,7 @@ const Publication = () => {
               size={'lg'}
               icon={<FaUser size={20} color={'gray'} />}
             />
-            <Text h4>Star Project</Text>
+            <Text h4>{cardData.title}</Text>
           </div>
 
           {starred ? (
@@ -37,32 +39,10 @@ const Publication = () => {
           )}
         </Card.Header>
         <Card.Body>
-          <Text>
-            This project was build with{' '}
-            <Link href={'https://nextjs.org/'}>
-              <a target={'_blank'} className={styles.card__body__link}>
-                NextJs
-              </a>
-            </Link>
-            ,{' '}
-            <Link href={'https://nextui.org/'}>
-              <a target={'_blank'} className={styles.card__body__link}>
-                NextUI
-              </a>
-            </Link>
-            ,{' '}
-            <Link href={'https://soliditylang.org/'}>
-              <a target={'_blank'} className={styles.card__body__link}>
-                Solidiy
-              </a>
-            </Link>{' '}
-            and{' '}
-            <Link href={'https://hardhat.org/'}>
-              <a target={'_blank'} className={styles.card__body__link}>
-                Hardhat
-              </a>
-            </Link>
-            . If you liked it, consider giving it a star.
+          <Text key={cardData.title}>
+            {bodyText[0]}
+            <Links lang={cardData.lang} />
+            {bodyText[1]}
           </Text>
         </Card.Body>
         <Card.Footer>
