@@ -11,6 +11,10 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
   const [starred, setStarred] = useState(true);
   const bodyText = cardData.description.split('<links>');
 
+  const handleClick = () => {
+    setStarred(!starred);
+  };
+
   return (
     <section className={styles.wrapper}>
       <Card hoverable>
@@ -29,12 +33,14 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
               size={27}
               color={'#f5a623'}
               className={styles.card__header__star}
+              onClick={handleClick}
             />
           ) : (
             <AiOutlineStar
               size={27}
               color={'#f5a623'}
               className={styles.card__header__star}
+              onClick={handleClick}
             />
           )}
         </Card.Header>
