@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: 1.5rem;
 }
 
 .card__header__imgName {
@@ -15,7 +16,6 @@
 }
 
 .card__header__star {
-  margin-right: 1rem;
   cursor: pointer;
   transition: 0.3s all ease-in;
   user-select: none;

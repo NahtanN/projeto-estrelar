@@ -1,18 +1,21 @@
-import { Avatar, Button, Card, Text } from '@nextui-org/react';
-import Link from 'next/link';
-import { useState } from 'react';
-import { AiOutlineStar, AiFillStar } from 'react-icons/ai';
+import { Avatar, Card, Text, Tooltip } from '@nextui-org/react';
+import { useContext, useState } from 'react';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
-import { cardData, CardDataType } from '../../services/cardData';
+import { CheckWalletContext } from '../../contexts';
+import { CardDataType } from '../../services/cardData';
 import Links from './Links';
 import styles from './Publication.module.css';
 
 const Publication = ({ cardData }: { cardData: CardDataType }) => {
+  const { currentAccount } = useContext(CheckWalletContext);
   const [starred, setStarred] = useState(false);
   const bodyText = cardData.description.split('<links>');
 
   const handleClick = () => {
-    setStarred(!starred);
+    if (currentAccount !== undefined) {
+      return setStarred(!starred);
+    }
   };
 
   return (
@@ -36,12 +39,14 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
               onClick={handleClick}
             />
           ) : (
-            <AiOutlineStar
-              size={27}
-              color={'#f5a623'}
-              className={styles.card__header__star}
-              onClick={handleClick}
-            />
+            <Tooltip content={cardData.tooltip} trigger="click">
+              <AiOutlineStar
+                size={27}
+                color={'#f5a623'}
+                className={styles.card__header__star}
+                onClick={handleClick}
+              />
+            </Tooltip>
           )}
         </Card.Header>
         <Card.Body>

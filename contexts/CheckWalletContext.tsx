@@ -1,8 +1,8 @@
-import { createContext, ReactChild, useState } from 'react';
+import { createContext, ReactChild, useEffect, useState } from 'react';
 
 type CheckWalletType = {
   isConnect: boolean;
-  currentAccount: string;
+  currentAccount: string | undefined;
   checkWallet: () => Promise<void>;
   connectWallet: () => Promise<void>;
 };
@@ -15,7 +15,7 @@ const CheckWalletProvider = ({
   children: ReactChild | ReactChild[];
 }) => {
   const [isConnect, setIsConnect] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentAccount, setCurrentAccount] = useState(undefined);
 
   const checkWallet = async () => {
     try {
@@ -28,7 +28,7 @@ const CheckWalletProvider = ({
         method: 'eth_accounts',
       });
 
-      if (accounts.lenght !== 0) {
+      if (accounts.length !== 0) {
         const account = accounts[0];
         return setCurrentAccount(account);
       }
