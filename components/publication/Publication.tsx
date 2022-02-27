@@ -8,7 +8,7 @@ import Links from './Links';
 import styles from './Publication.module.css';
 
 const Publication = ({ cardData }: { cardData: CardDataType }) => {
-  const [starred, setStarred] = useState(true);
+  const [starred, setStarred] = useState(false);
   const bodyText = cardData.description.split('<links>');
 
   const handleClick = () => {

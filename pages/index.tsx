@@ -1,8 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Publication } from '../components';
+import { Header, Publication } from '../components';
 import styles from '../styles/Home.module.css';
 import { cardData } from '../services/cardData';
+import { useEffect, useState } from 'react';
+import { ConnectButton } from '../components/buttons';
 
 const Home: NextPage = () => {
   return (
@@ -13,7 +15,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Projeto Estrelar</h1>
+      <Header />
       <main className={styles.cards}>
         {cardData.map(card => {
           return <Publication key={card.title} cardData={card} />;
