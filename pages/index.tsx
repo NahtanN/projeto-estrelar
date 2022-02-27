@@ -1,10 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Header, Publication } from '../components';
-import styles from '../styles/Home.module.css';
 import { cardData } from '../services/cardData';
-import { useEffect, useState } from 'react';
-import { ConnectButton } from '../components/buttons';
+import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   return (
