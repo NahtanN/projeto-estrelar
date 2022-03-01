@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { createContext, ReactChild, useEffect, useState } from 'react';
 
 type CheckWalletType = {
@@ -52,6 +53,29 @@ const CheckWalletProvider = ({
       console.log(err);
     }
   };
+
+  // const star = async () => {
+  //   try {
+  //     // @ts-ignore
+  //     const { ethereum } = window;
+
+  //     if (ethereum) {
+  //       const provider = new ethers.providers.Web3Provider(ethereum);
+
+  //       const signer = provider.getSigner();
+
+  //       const starProtalContract = new ethers.Contract(
+  //         contractAddress,
+  //         contractABI,
+  //         signer
+  //       );
+
+  //       let count = await starProtalContract.getTotalStars();
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <CheckWalletContext.Provider

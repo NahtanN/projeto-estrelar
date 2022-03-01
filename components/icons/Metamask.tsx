@@ -1,9 +1,23 @@
+import { useEffect, useState } from 'react';
+
 const MetamaskIcon = () => {
+  const [[width, height], setSize] = useState([20, 20]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 370) {
+        return setSize([15, 15]);
+      }
+
+      return setSize([20, 20]);
+    });
+  }, []);
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width={width}
+      height={height}
       viewBox="0 0 212 189"
     >
       <g fill="none" fillRule="evenodd">

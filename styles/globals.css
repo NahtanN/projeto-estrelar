@@ -27,3 +27,10 @@ button,
 textarea {
   font: 600 1.8rem 'Poppins', sans-serif;
 }
+
+@media (max-width: 370px) {
+  body,
+  html {
+    font-size: 0.8rem;
+  }
+}

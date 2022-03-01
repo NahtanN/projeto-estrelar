@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
 import { ConnectButton } from '..';
-
 import styles from './Header.module.css';
 
 const Header = () => {
