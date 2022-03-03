@@ -6,6 +6,11 @@ type CheckWalletType = {
   currentAccount: string | undefined;
   checkWallet: () => Promise<void>;
   connectWallet: () => Promise<void>;
+  getSigner: () => Promise<
+    | ethers.providers.JsonRpcProvider
+    | ethers.providers.JsonRpcSigner
+    | undefined
+  >;
 };
 
 export const CheckWalletContext = createContext({} as CheckWalletType);
@@ -16,7 +21,7 @@ const CheckWalletProvider = ({
   children: ReactChild | ReactChild[];
 }) => {
   const [isConnect, setIsConnect] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState(undefined);
+  const [currentAccount, setCurrentAccount] = useState();
 
   const checkWallet = async () => {
     try {
@@ -54,32 +59,37 @@ const CheckWalletProvider = ({
     }
   };
 
-  // const star = async () => {
-  //   try {
-  //     // @ts-ignore
-  //     const { ethereum } = window;
+  const getSigner = async () => {
+    try {
+      // @ts-ignore
+      const { ethereum } = window;
 
-  //     if (ethereum) {
-  //       const provider = new ethers.providers.Web3Provider(ethereum);
+      if (!ethereum || !currentAccount) {
+        const provider = new ethers.providers.JsonRpcProvider(process.env.RCP);
 
-  //       const signer = provider.getSigner();
+        return provider;
+      } else if (ethereum && currentAccount) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
 
-  //       const starProtalContract = new ethers.Contract(
-  //         contractAddress,
-  //         contractABI,
-  //         signer
-  //       );
-
-  //       let count = await starProtalContract.getTotalStars();
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+        return signer;
+      } else {
+        console.log('Log in into metamask');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <CheckWalletContext.Provider
-      value={{ isConnect, currentAccount, checkWallet, connectWallet }}
+      value={{
+        isConnect,
+        currentAccount,
+        checkWallet,
+        connectWallet,
+        getSigner,
+      }}
     >
       {children}
     </CheckWalletContext.Provider>

@@ -1,15 +1,19 @@
 import { Avatar, Card, Text, Tooltip } from '@nextui-org/react';
-import { useContext, useState } from 'react';
+import { ethers, Contract } from 'ethers';
+import { useContext, useEffect, useState } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
 import { CheckWalletContext } from '../../contexts';
+import { enStarProject } from '../../services';
 import { CardDataType } from '../../services/cardData';
 import Links from './Links';
 import styles from './Publication.module.css';
 
 const Publication = ({ cardData }: { cardData: CardDataType }) => {
-  const { currentAccount } = useContext(CheckWalletContext);
+  const { currentAccount, getSigner } = useContext(CheckWalletContext);
   const [starred, setStarred] = useState(false);
+  const [stars, setStars] = useState(0);
+
   const bodyText = cardData.description.split('<links>');
 
   const handleClick = () => {
@@ -17,6 +21,23 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
       return setStarred(!starred);
     }
   };
+
+  const getTotalStars = async () => {
+    let signer = await getSigner();
+
+    const starProject = new ethers.Contract(
+      cardData.contract,
+      enStarProject.abi,
+      signer
+    );
+
+    const count = await starProject.getTotalStars();
+    setStars(count.toNumber());
+  };
+
+  useEffect(() => {
+    getTotalStars();
+  }, []);
 
   return (
     <section className={styles.wrapper}>
@@ -58,7 +79,7 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
         </Card.Body>
         <Card.Footer>
           <Text>
-            <strong>10</strong> stars
+            <strong>{stars}</strong> stars
           </Text>
         </Card.Footer>
       </Card>
