@@ -9,16 +9,16 @@ import {
   Textarea,
   Tooltip,
 } from '@nextui-org/react';
-import { ethers, Contract } from 'ethers';
+import { ethers } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
 import { CheckWalletContext } from '../../contexts';
-import { enStarProject } from '../../services';
 import { CardDataType } from '../../services/cardData';
 import Links from './Links';
 import styles from './Publication.module.css';
 
+// TODO: need to refactor
 const Publication = ({ cardData }: { cardData: CardDataType }) => {
   const { currentAccount, getSigner } = useContext(CheckWalletContext);
   const [starred, setStarred] = useState(false);
@@ -27,19 +27,27 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
   const [removeStarVisible, setRemoveStarVisible] = useState(false);
   const [message, setMessage] = useState('');
   const [addStarLoading, setAddStarLoading] = useState(false);
+  const [textareaError, setTextareaError] = useState(false);
 
   const bodyText = cardData.description.split('<links>');
 
   const handleClickOpenOutlineStar = () => {
     setAddStarVisible(true);
   };
-  const handleClickCloseOutlineStar = () => setAddStarVisible(false);
+
+  const handleClickCloseOutlineStar = () => {
+    setAddStarVisible(false);
+    setTextareaError(false);
+  };
+
   const sendStar = async () => {
+    if (message === '') return setTextareaError(true);
+
     let signer = await getSigner();
 
     const starProject = new ethers.Contract(
       cardData.contract,
-      enStarProject.abi,
+      cardData.contractJson.abi,
       signer
     );
 
@@ -51,13 +59,38 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
     setStars(count.toNumber());
 
     setAddStarLoading(false);
+    isStarred();
     return handleClickCloseOutlineStar();
   };
 
   const closeRemoveStarModal = () => setRemoveStarVisible(false);
 
   const removeStar = () => {
-    setRemoveStarVisible(true);
+    setRemoveStarVisible(false);
+  };
+
+  const isStarred = async () => {
+    if (currentAccount !== undefined) {
+      let signer = await getSigner();
+
+      const starProject = new ethers.Contract(
+        cardData.contract,
+        cardData.contractJson.abi,
+        signer
+      );
+
+      const contract = await starProject.getAllAccounts();
+
+      let upperCaseAdresses = contract.map((address: string) =>
+        address.toUpperCase()
+      );
+
+      upperCaseAdresses.includes(currentAccount.toUpperCase())
+        ? setStarred(true)
+        : setStarred(false);
+    } else {
+      return setStarred(false);
+    }
   };
 
   const getTotalStars = async () => {
@@ -65,7 +98,7 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
 
     const starProject = new ethers.Contract(
       cardData.contract,
-      enStarProject.abi,
+      cardData.contractJson.abi,
       signer
     );
 
@@ -98,6 +131,10 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
   useEffect(() => {
     getTotalStars();
   }, []);
+
+  useEffect(() => {
+    isStarred();
+  }, [currentAccount]);
 
   return (
     <section className={styles.wrapper}>
@@ -147,8 +184,12 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
                 bordered
                 rows={3}
                 maxRows={3}
-                onChange={e => setMessage(e.target.value)}
+                onChange={e => {
+                  setMessage(e.target.value);
+                  setTextareaError(false);
+                }}
                 placeholder="Hello World..."
+                status={textareaError ? 'error' : 'default'}
               />
             </Modal.Body>
             <Modal.Footer>
