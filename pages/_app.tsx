@@ -16,9 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         method: 'eth_accounts',
       });
 
-      if (accounts.length === 0) {
-        location.reload();
-      }
+      location.reload();
     });
   }, []);
 
