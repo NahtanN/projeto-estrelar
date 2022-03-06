@@ -22,7 +22,8 @@ import styles from './Publication.module.css';
 
 // TODO: need to refactor
 const Publication = ({ cardData }: { cardData: CardDataType }) => {
-  const { currentAccount, getSigner } = useContext(CheckWalletContext);
+  const { currentAccount, getSigner, connectContract } =
+    useContext(CheckWalletContext);
   const [starred, setStarred] = useState(false);
   const [stars, setStars] = useState(0);
   const [addStarVisible, setAddStarVisible] = useState(false);
@@ -65,10 +66,28 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
     return handleClickCloseOutlineStar();
   };
 
+  const handleClickOpenFillStar = () => {
+    setRemoveStarVisible(true);
+  };
+
   const closeRemoveStarModal = () => setRemoveStarVisible(false);
 
-  const removeStar = () => {
-    setRemoveStarVisible(false);
+  const removeStar = async () => {
+    setAddStarLoading(true);
+
+    const contract = await connectContract(
+      cardData.contract,
+      cardData.contractJson.abi
+    );
+
+    await contract.removeAccount();
+
+    await isStarred();
+    await getTotalStars();
+
+    setAddStarLoading(false);
+
+    return setRemoveStarVisible(false);
   };
 
   const isStarred = async () => {
@@ -115,7 +134,7 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
           size={27}
           color={'#f5a623'}
           className={styles.card__header__star}
-          onClick={removeStar}
+          onClick={handleClickOpenFillStar}
         />
       );
     }
@@ -222,15 +241,26 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
             onClose={closeRemoveStarModal}
           >
             <Modal.Header>
-              <Text h3>Add Star</Text>
+              <Text h3>Remove Star</Text>
             </Modal.Header>
-            <Modal.Body>Estrela</Modal.Body>
+            <Modal.Body>
+              <Input disabled value={currentAccount} label="Account" />
+              <Input
+                disabled
+                value={`${cardData.title} - ${cardData.lang}`}
+                label="Project"
+              />
+            </Modal.Body>
             <Modal.Footer>
               <Button auto flat color={'error'} onClick={closeRemoveStarModal}>
                 Close
               </Button>
-              <Button auto onClick={closeRemoveStarModal}>
-                Send Star
+              <Button auto onClick={removeStar} shadow>
+                {addStarLoading ? (
+                  <Loading color={'white'} size={'sm'} type={'points'} />
+                ) : (
+                  'Remove Star'
+                )}
               </Button>
             </Modal.Footer>
           </Modal>
