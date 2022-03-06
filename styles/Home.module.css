@@ -1,5 +1,7 @@
 .container {
+  height: 100vh;
   padding: 0 1rem 0 1rem;
+  position: relative;
 }
 
 .cards {
@@ -7,4 +9,41 @@
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.footer {
+  width: 100%;
+  margin-top: 17rem;
+}
+
+.footer__wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer svg {
+  transition: 0.3s all;
+}
+
+.footer svg:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 1024px) {
+  .footer {
+    margin-top: 12rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 370px) {
+  .footer svg {
+    font-size: 2rem;
+  }
 }

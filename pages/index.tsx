@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { Header, Publication } from '../components';
 import { cardData } from '../services/cardData';
 import styles from '../styles/Home.module.css';
+import { FaGithub, FaTelegram } from 'react-icons/fa';
+import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
@@ -19,6 +21,21 @@ const Home: NextPage = () => {
           return <Publication key={card.title} cardData={card} />;
         })}
       </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.footer__wrapper}>
+          <Link href="https://github.com/NahtanN">
+            <a target="_blank">
+              <FaGithub />
+            </a>
+          </Link>
+          <Link href="https://t.me/RegnetShall">
+            <a target="_blank">
+              <FaTelegram />
+            </a>
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 };
