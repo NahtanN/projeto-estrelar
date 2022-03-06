@@ -24,3 +24,10 @@
 .card__body__link {
   color: #0070f2;
 }
+
+.card__footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

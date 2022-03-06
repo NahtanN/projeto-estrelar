@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Input,
+  Link,
   Loading,
   Modal,
   Text,
@@ -15,6 +16,7 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
 import { CheckWalletContext } from '../../contexts';
 import { CardDataType } from '../../services/cardData';
+import { MessagesModal } from '../modals';
 import Links from './Links';
 import styles from './Publication.module.css';
 
@@ -241,9 +243,13 @@ const Publication = ({ cardData }: { cardData: CardDataType }) => {
           </Text>
         </Card.Body>
         <Card.Footer>
-          <Text>
-            <strong>{stars}</strong> stars
-          </Text>
+          <div className={styles.card__footer}>
+            <Text>
+              <strong>{stars}</strong> stars
+            </Text>
+
+            <MessagesModal cardData={cardData} />
+          </div>
         </Card.Footer>
       </Card>
     </section>

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { createContext, ReactChild, useEffect, useState } from 'react';
+import { createContext, ReactChild, useState } from 'react';
 
 type CheckWalletType = {
   isConnect: boolean;
@@ -11,6 +11,10 @@ type CheckWalletType = {
     | ethers.providers.JsonRpcSigner
     | undefined
   >;
+  connectContract: (
+    contractAddress: string,
+    abi: ethers.ContractInterface
+  ) => Promise<ethers.Contract>;
 };
 
 export const CheckWalletContext = createContext({} as CheckWalletType);
@@ -81,6 +85,17 @@ const CheckWalletProvider = ({
     }
   };
 
+  const connectContract = async (
+    contractAddress: string,
+    abi: ethers.ContractInterface
+  ) => {
+    let signer = await getSigner();
+
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    return contract;
+  };
+
   return (
     <CheckWalletContext.Provider
       value={{
@@ -89,6 +104,7 @@ const CheckWalletProvider = ({
         checkWallet,
         connectWallet,
         getSigner,
+        connectContract,
       }}
     >
       {children}
