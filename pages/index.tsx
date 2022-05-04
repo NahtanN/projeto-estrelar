@@ -1,12 +1,24 @@
-import type { NextPage } from 'next';
+import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import { Header, Publication } from '../components';
-import { cardData } from '../services/cardData';
+import { cardData, CardDataType } from '../services/cardData';
 import styles from '../styles/Home.module.css';
 import { FaGithub, FaTelegram } from 'react-icons/fa';
 import Link from 'next/link';
 
-const Home: NextPage = () => {
+interface HomeInterface {
+  data: CardDataType[];
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {
+      data: cardData,
+    },
+  };
+};
+
+const Home: React.FC<HomeInterface> = ({ data }: HomeInterface) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +29,7 @@ const Home: NextPage = () => {
 
       <Header />
       <main className={styles.cards}>
-        {cardData.map(card => {
+        {data.map(card => {
           return <Publication key={card.title} cardData={card} />;
         })}
       </main>
